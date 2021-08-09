@@ -44,12 +44,14 @@ func errorResponse(code int) func(http.ResponseWriter, *http.Request) {
 
 func TestCreatePayment(t *testing.T) {
 	assert := assert.New(t)
+
 	testResponse := &lvlup.CreatePaymentResult{
 		Id:  "id",
 		Url: "url",
 	}
 
 	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResponse)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -62,7 +64,9 @@ func TestCreatePayment(t *testing.T) {
 
 func TestCreatePaymentError(t *testing.T) {
 	assert := assert.New(t)
+
 	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusBadRequest)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -102,12 +106,14 @@ func TestListPaymentsWithAfterIdOption(t *testing.T) {
 
 func TestListPayments(t *testing.T) {
 	assert := assert.New(t)
+
 	testResponse := &lvlup.ListPaymentsResult{
 		Count: 0,
 		Items: []lvlup.ListPaymentsResultItem{},
 	}
 
 	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResponse)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -120,7 +126,9 @@ func TestListPayments(t *testing.T) {
 
 func TestListPaymentsError(t *testing.T) {
 	assert := assert.New(t)
+
 	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusInternalServerError)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -133,12 +141,14 @@ func TestListPaymentsError(t *testing.T) {
 
 func TestWalletBalance(t *testing.T) {
 	assert := assert.New(t)
+
 	testResult := &lvlup.WalletBalanceResult{
 		BalancePlnFormatted: "0PLN :P",
 		BalancePlnInt:       0,
 	}
 
 	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResult)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -151,7 +161,9 @@ func TestWalletBalance(t *testing.T) {
 
 func TestWalletBalanceError(t *testing.T) {
 	assert := assert.New(t)
+
 	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusInternalServerError)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -164,6 +176,7 @@ func TestWalletBalanceError(t *testing.T) {
 
 func TestInspectPayment(t *testing.T) {
 	assert := assert.New(t)
+
 	testResult := &lvlup.InspectPaymentResult{
 		AmountInt:        1,
 		AmountStr:        "1",
@@ -173,6 +186,7 @@ func TestInspectPayment(t *testing.T) {
 	}
 
 	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResult)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -185,7 +199,9 @@ func TestInspectPayment(t *testing.T) {
 
 func TestInspectPaymentError(t *testing.T) {
 	assert := assert.New(t)
+
 	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusInternalServerError)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
@@ -198,7 +214,9 @@ func TestInspectPaymentError(t *testing.T) {
 
 func TestInspectPaymentNotFound(t *testing.T) {
 	assert := assert.New(t)
+
 	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusNotFound)))
+	defer httpMock.Close()
 
 	client := lvlup.NewLvlClient("key", httpMock.Client())
 	client.ApiBase = httpMock.URL
