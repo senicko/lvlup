@@ -79,29 +79,32 @@ func TestCreatePaymentError(t *testing.T) {
 
 func TestListPaymentsWithLimitOption(t *testing.T) {
 	testLimit := 20
+	expectedLimit := "20"
 	testOptions := lvlup.ListPaymentsOptions{}
 
 	lvlup.WithLimit(testLimit)(&testOptions)
 
-	assert.Equal(t, testOptions["limit"], testLimit, "Limit should be equal 20")
+	assert.Equal(t, testOptions["limit"], expectedLimit, "Limit should be equal 20")
 }
 
 func TestListPaymentsWithBeforeIdOption(t *testing.T) {
 	testBeforeId := 20
+	expectedBeforeId := "20"
 	testOptions := lvlup.ListPaymentsOptions{}
 
 	lvlup.WithBeforeId(testBeforeId)(&testOptions)
 
-	assert.Equal(t, testOptions["beforeId"], testBeforeId, "BeforeId should be set to 20")
+	assert.Equal(t, testOptions["beforeId"], expectedBeforeId, "BeforeId should be set to 20")
 }
 
 func TestListPaymentsWithAfterIdOption(t *testing.T) {
 	testAfterId := 20
+	expectedAfterId := "20"
 	testOptions := lvlup.ListPaymentsOptions{}
 
 	lvlup.WithAfterId(testAfterId)(&testOptions)
 
-	assert.Equal(t, testOptions["afterId"], testAfterId, "AfterId should be set to 20")
+	assert.Equal(t, testOptions["afterId"], expectedAfterId, "AfterId should be set to 20")
 }
 
 func TestListPayments(t *testing.T) {
