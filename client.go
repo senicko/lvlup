@@ -15,7 +15,7 @@ type LvlClient struct {
 // LvlClientOption describes functional option for the client
 type LvlClientOption func(*LvlClient)
 
-// EnableSandboxMode enables sandbox mode for the LvlClient
+// WithSandboxMode enables sandbox mode for the LvlClient
 func WithSandboxMode() LvlClientOption {
 	return func(lc *LvlClient) {
 		lc.SandboxMode = true
