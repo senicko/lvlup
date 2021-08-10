@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// LvlClient describes properties stored by the client
+// LvlClient describes properties stored by the client.
 type LvlClient struct {
 	ApiKey      string
 	ApiBase     string
@@ -12,10 +12,10 @@ type LvlClient struct {
 	HttpClient  *http.Client
 }
 
-// LvlClientOption describes functional option for the client
+// LvlClientOption describes functional option for the client.
 type LvlClientOption func(*LvlClient)
 
-// WithSandboxMode enables sandbox mode for the LvlClient
+// WithSandboxMode enables sandbox mode for the LvlClient.
 func WithSandboxMode() LvlClientOption {
 	return func(lc *LvlClient) {
 		lc.SandboxMode = true
@@ -23,7 +23,7 @@ func WithSandboxMode() LvlClientOption {
 	}
 }
 
-// NewLvlClient creates new lvlup api client
+// NewLvlClient creates new lvlup api client.
 func NewLvlClient(apiKey string, httpClient *http.Client, opts ...LvlClientOption) *LvlClient {
 
 	lc := &LvlClient{
