@@ -1,11 +1,12 @@
 package lvlup
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/SeNicko/lvlup/requests"
 )
 
 // CreatePaymentOptions describes available options for POST /wallet/up request.
@@ -57,15 +58,13 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 		return nil, err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, lc.ApiBase+"/wallet/up", bytes.NewBuffer(payload))
-
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Authorization", "Bearer "+lc.ApiKey)
-
-	response, err := lc.HttpClient.Do(request)
+	response, err := lc.Requests.Post(
+		lc.ApiBase+"/wallet/up",
+		requests.WithBody(payload),
+		requests.WithHeaders(map[string]string{
+			"Authorization": "Bearer " + lc.ApiKey,
+		}),
+	)
 
 	if err != nil {
 		return nil, err
@@ -100,7 +99,7 @@ type ListPaymentsResult struct {
 }
 
 // ListPaymentsOptions is a type declaration of a map storing optional query parameters for GET /payments request.
-type ListPaymentsOptions map[string]int
+type ListPaymentsOptions map[string]string
 
 // ListPaymentsOption describes functional option for a ListPayments func.
 type ListPaymentsOption func(*ListPaymentsOptions)
@@ -108,50 +107,40 @@ type ListPaymentsOption func(*ListPaymentsOptions)
 // WithLimit allows to set max payments count per page.
 func WithLimit(limit int) ListPaymentsOption {
 	return func(lpo *ListPaymentsOptions) {
-		(*lpo)["limit"] = limit
+		(*lpo)["limit"] = strconv.Itoa(limit)
 	}
 }
 
 // WithBeforeId allows to set payment id before which payments should be returned.
 func WithBeforeId(beforeId int) ListPaymentsOption {
 	return func(lpo *ListPaymentsOptions) {
-		(*lpo)["beforeId"] = beforeId
+		(*lpo)["beforeId"] = strconv.Itoa(beforeId)
 	}
 }
 
 // WithAfterId allows to set payment id after which payments should be returned.
 func WithAfterId(afterId int) ListPaymentsOption {
 	return func(lpo *ListPaymentsOptions) {
-		(*lpo)["afterId"] = afterId
+		(*lpo)["afterId"] = strconv.Itoa(afterId)
 	}
 }
 
 // ListPayments makes a request to GET /payments.
 // It returns request result and eny errors encountered.
 func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResult, error) {
-	var options ListPaymentsOptions = map[string]int{}
+	var options ListPaymentsOptions = map[string]string{}
 
 	for _, opt := range opts {
 		opt(&options)
 	}
 
-	request, err := http.NewRequest(http.MethodGet, lc.ApiBase+"/paments", nil)
-
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Authorization", "Bearer "+lc.ApiKey)
-
-	query := request.URL.Query()
-
-	for key, value := range options {
-		query.Set(key, strconv.Itoa(value))
-	}
-
-	request.URL.RawQuery = query.Encode()
-
-	response, err := lc.HttpClient.Do(request)
+	response, err := lc.Requests.Get(
+		lc.ApiBase+"/payments",
+		requests.WithQuery(options),
+		requests.WithHeaders(map[string]string{
+			"Authorization": "Bearer " + lc.ApiKey,
+		}),
+	)
 
 	if err != nil {
 		return nil, err
@@ -178,15 +167,12 @@ type WalletBalanceResult struct {
 // WalletBalance makes a request to GET /wallet.
 // It returns request result and any errors encountered.
 func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
-	request, err := http.NewRequest(http.MethodGet, lc.ApiBase+"/wallet", nil)
-
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Authorization", "Bearer "+lc.ApiKey)
-
-	response, err := lc.HttpClient.Do(request)
+	response, err := lc.Requests.Get(
+		lc.ApiBase+"/wallet",
+		requests.WithHeaders(map[string]string{
+			"Authorization": "Bearer " + lc.ApiKey,
+		}),
+	)
 
 	if err != nil {
 		return nil, err
@@ -216,15 +202,12 @@ type InspectPaymentResult struct {
 // InspectPayment makes a request to GET /wallet/up/{id}.
 // It returns request result and any errors encountered.
 func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, error) {
-	request, err := http.NewRequest(http.MethodGet, lc.ApiBase+"/wallet/up/"+paymentId, nil)
-
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Authorization", "Bearer "+lc.ApiKey)
-
-	response, err := lc.HttpClient.Do(request)
+	response, err := lc.Requests.Get(
+		lc.ApiBase+"/wallet/up/"+paymentId,
+		requests.WithHeaders(map[string]string{
+			"Authorization": "Bearer " + lc.ApiKey,
+		}),
+	)
 
 	if err != nil {
 		return nil, err
