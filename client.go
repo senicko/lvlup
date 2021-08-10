@@ -2,8 +2,6 @@ package lvlup
 
 import (
 	"net/http"
-
-	"github.com/SeNicko/lvlup/requests"
 )
 
 // LvlClient describes properties stored by the client
@@ -11,7 +9,7 @@ type LvlClient struct {
 	ApiKey      string
 	ApiBase     string
 	SandboxMode bool
-	Requests    *requests.Requests
+	HttpClient  *http.Client
 }
 
 // LvlClientOption describes functional option for the client
@@ -27,13 +25,12 @@ func WithSandboxMode() LvlClientOption {
 
 // NewLvlClient creates new lvlup api client
 func NewLvlClient(apiKey string, httpClient *http.Client, opts ...LvlClientOption) *LvlClient {
-	requests := requests.NewRequests("", httpClient)
 
 	lc := &LvlClient{
 		ApiKey:      apiKey,
 		ApiBase:     "https://api.lvlup.pro/v4",
 		SandboxMode: false,
-		Requests:    requests,
+		HttpClient:  httpClient,
 	}
 
 	for _, opt := range opts {

@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-
-	"github.com/SeNicko/lvlup/requests"
 )
 
 // CreatePaymentOptions describes available options for POST /wallet/up request.
@@ -58,10 +56,10 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 		return nil, err
 	}
 
-	response, err := lc.Requests.Post(
-		lc.ApiBase+"/wallet/up",
-		requests.WithBody(payload),
-		requests.WithHeaders(map[string]string{
+	response, err := lc.post(
+		"/wallet/up",
+		withBody(payload),
+		withHeaders(map[string]string{
 			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
@@ -134,10 +132,10 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 		opt(&options)
 	}
 
-	response, err := lc.Requests.Get(
-		lc.ApiBase+"/payments",
-		requests.WithQuery(options),
-		requests.WithHeaders(map[string]string{
+	response, err := lc.get(
+		"/payments",
+		withQuery(options),
+		withHeaders(map[string]string{
 			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
@@ -167,9 +165,9 @@ type WalletBalanceResult struct {
 // WalletBalance makes a request to GET /wallet.
 // It returns request result and any errors encountered.
 func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
-	response, err := lc.Requests.Get(
-		lc.ApiBase+"/wallet",
-		requests.WithHeaders(map[string]string{
+	response, err := lc.get(
+		"/wallet",
+		withHeaders(map[string]string{
 			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
@@ -202,9 +200,9 @@ type InspectPaymentResult struct {
 // InspectPayment makes a request to GET /wallet/up/{id}.
 // It returns request result and any errors encountered.
 func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, error) {
-	response, err := lc.Requests.Get(
-		lc.ApiBase+"/wallet/up/"+paymentId,
-		requests.WithHeaders(map[string]string{
+	response, err := lc.get(
+		"/wallet/up/"+paymentId,
+		withHeaders(map[string]string{
 			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
