@@ -75,7 +75,9 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 	defer response.Body.Close()
 
 	var result CreatePaymentResult
-	json.NewDecoder(response.Body).Decode(&result)
+	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
+                return nil, err
+        }
 
 	return &result, nil
 }
