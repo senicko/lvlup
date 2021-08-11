@@ -153,7 +153,9 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 	defer response.Body.Close()
 
 	var result ListPaymentsResult
-	json.NewDecoder(response.Body).Decode(&result)
+	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
+                return nil, err
+        }
 
 	return &result, nil
 }
@@ -185,7 +187,9 @@ func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 	defer response.Body.Close()
 
 	var result WalletBalanceResult
-	json.NewDecoder(response.Body).Decode(&result)
+	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
+                return nil, err
+        }
 
 	return &result, nil
 }
@@ -222,7 +226,9 @@ func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, err
 	defer response.Body.Close()
 
 	var result InspectPaymentResult
-	json.NewDecoder(response.Body).Decode(&result)
+	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
+                return nil, err
+        }
 
 	return &result, nil
 }
