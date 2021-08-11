@@ -7,20 +7,20 @@ import (
 	"strconv"
 )
 
-// CreatePaymentOptions describes available options for POST /wallet/up request.
+// CreatePaymentOptions represents available options for POST /wallet/up request.
 type CreatePaymentOptions struct {
 	Amount      string `json:"amount"`
 	RedirectUrl string `json:"redirectUrl"`
 	WebhookUrl  string `json:"webhookUrl"`
 }
 
-// CreatePaymentResult describes result of POST /wallet/up request.
+// CreatePaymentResult represents result of POST /wallet/up request.
 type CreatePaymentResult struct {
 	Id  string `json:"id"`
 	Url string `json:"url"`
 }
 
-// CreatePaymentOption describes a functional option for CreatePayment func.
+// CreatePaymentOption represents a functional option for CreatePayment func.
 type CreatePaymentOption func(*CreatePaymentOptions)
 
 // Set url to which user should be redirected after completing a payment.
@@ -80,7 +80,7 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 	return &result, nil
 }
 
-// ListPaymentsResultItem describes single item from GET /payments request result.
+// ListPaymentsResultItem represents single item from GET /payments request result.
 type ListPaymentsResultItem struct {
 	Amount      string `json:"amount"`
 	CreatedAt   string `json:"createdAt"`
@@ -90,16 +90,16 @@ type ListPaymentsResultItem struct {
 	ServiceId   int    `json:"serviceId"`
 }
 
-// ListPaymentsResult describes result of GET /payments request.
+// ListPaymentsResult represents result of GET /payments request.
 type ListPaymentsResult struct {
 	Count int                      `json:"count"`
 	Items []ListPaymentsResultItem `json:"items"`
 }
 
-// ListPaymentsOptions is a type declaration of a map storing optional query parameters for GET /payments request.
+// ListPaymentsOptions represents a map storing optional query parameters for GET /payments request.
 type ListPaymentsOptions map[string]string
 
-// ListPaymentsOption describes functional option for a ListPayments func.
+// ListPaymentsOption represents functional option for a ListPayments func.
 type ListPaymentsOption func(*ListPaymentsOptions)
 
 // WithLimit allows to set max payments count per page.
@@ -156,7 +156,7 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 	return &result, nil
 }
 
-// WalletBalanceResult describes result of GET /wallet request.
+// WalletBalanceResult represents result of GET /wallet request.
 type WalletBalanceResult struct {
 	BalancePlnFormatted string `json:"balancePlnFormatted"`
 	BalancePlnInt       int    `json:"balancePlnInt"`
@@ -188,7 +188,7 @@ func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 	return &result, nil
 }
 
-// InspectPaymentResult describes result of GET /wallet/up/{id}.
+// InspectPaymentResult represents result of GET /wallet/up/{id}.
 type InspectPaymentResult struct {
 	AmountInt        int    `json:"amountInt"`
 	AmountStr        string `json:"amuntStr"`

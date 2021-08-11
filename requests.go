@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// requestOptions defines options available for a request.
+// requestOptions represents options for http request.
 type requestOptions struct {
 	Headers map[string]string
 	Query   map[string]string
@@ -36,7 +36,7 @@ func withBody(body []byte) requestOption {
 	}
 }
 
-// newRequestOptions parses request options and returns requesOptions struct.
+// newRequestOptions creates new requestOptions with applied settings.
 func newRequestOptions(opts ...requestOption) *requestOptions {
 	requestOptions := &requestOptions{
 		Body: http.NoBody,
