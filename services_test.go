@@ -53,3 +53,25 @@ func Test_List_DDoS_Attacks_Error(t *testing.T) {
 
 	assert.NotNil(t, err, "Error should not be nil")
 }
+
+func Test_Get_UDP_Filter(t *testing.T) {
+	httpClient := httptest.NewServer(testutil.SuccessJSON(lvlup.GetUDPFilterResponse{}))
+	defer httpClient.Close()
+	client := lvlup.NewLvlClient("", httpClient.Client())
+	client.ApiBase = httpClient.URL
+
+	_, err := client.GetUDPFilter("")
+
+	assert.Nil(t, err, "Error should be nil")
+}
+
+func Test_Get_UDP_Filter_Error(t *testing.T) {
+	httpClient := httptest.NewServer(testutil.Error(http.StatusInternalServerError))
+	defer httpClient.Close()
+	client := lvlup.NewLvlClient("", httpClient.Client())
+	client.ApiBase = httpClient.URL
+
+	_, err := client.GetUDPFilter("")
+
+	assert.NotNil(t, err, "Error should not be nil")
+}

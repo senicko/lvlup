@@ -90,3 +90,36 @@ func (lc LvlClient) ListVpsDDoS(vpsId string) (*ListVpsDDoSResult, error) {
 
 	return &body, nil
 }
+
+// GetUDPFilterResponse represents result of GET /services/vps/{id}/filtering.
+type GetUDPFilterResponse struct {
+	FilteringEnabled bool   `json:"filteringEnabled"`
+	State            string `json:"state"`
+}
+
+// GetUDPFilter allows to check UDP filtering status for specified VPS.
+func (lc LvlClient) GetUDPFilter(vpsId string) (*GetUDPFilterResponse, error) {
+	response, err := lc.get(
+		"/services/vps/"+vpsId+"/filtering",
+		withHeaders(map[string]string{
+			"Authorization": "Bearer " + lc.ApiKey,
+		}),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("status: %v", response.Status)
+	}
+
+	var body GetUDPFilterResponse
+	if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
+		return nil, err
+	}
+
+	return &body, nil
+}
