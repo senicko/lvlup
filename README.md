@@ -8,14 +8,6 @@ Current codebase can be treated as a experiment which can be something different
 
 This does not mean that you shouldn't use it. Any feedback is welcome! If you have any ideas on how to make this library better, or you see potential issues with sourcecode create an issue with a proper flag.
 
-## Development
-
-Features are developed on separete branches.
-
-`feature/<feature-name>`
-
-`<feature-name>` - section from api docs eg. payments / services / sandbox
-
 ## Quick Start
 
 ```go
