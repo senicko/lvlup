@@ -24,8 +24,8 @@ type ListServicesResult struct {
 	Services []Service
 }
 
-// ListServices makes a request to GET /services.
-// It returns request result and any errors occured
+// ListServices allows to list all services like VPS or domains.
+// It returns request result or any errors encountered.
 func (lc LvlClient) ListServices() (*ListServicesResult, error) {
 	response, err := lc.get(
 		"/services",
@@ -45,6 +45,45 @@ func (lc LvlClient) ListServices() (*ListServicesResult, error) {
 	}
 
 	var body ListServicesResult
+	if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
+		return nil, err
+	}
+
+	return &body, nil
+}
+
+// DDoSAttack represents single DDoS Attack.
+type DDoSAttack struct {
+	Id        int    `json:"id"`
+	Ip        string `json:"ip"`
+	StartedAt int    `json:"startedAt"`
+	EndedAt   int    `json:"endedAt"`
+}
+
+// ListVpsDDoSResult represents result of GET /services/vps/{id}/attacks request.
+type ListVpsDDoSResult struct {
+	Count int          `json:"count"`
+	Items []DDoSAttack `json:"items"`
+}
+
+// ListVpsDDoS allows to access list of DDoS attacks for specific VPS.
+func (lc LvlClient) ListVpsDDoS(vpsId string) (*ListVpsDDoSResult, error) {
+	response, err := lc.get(
+		"/services/vps/"+vpsId+"/attacks",
+		withHeaders(map[string]string{
+			"Authorization": "Bearer " + lc.ApiKey,
+		}),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("status: %v", response.Status)
+	}
+
+	var body ListVpsDDoSResult
 	if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
 		return nil, err
 	}
