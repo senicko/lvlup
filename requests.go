@@ -96,3 +96,15 @@ func (lc LvlClient) get(path string, opts ...requestOption) (*http.Response, err
 func (lc LvlClient) post(path string, opts ...requestOption) (*http.Response, error) {
 	return lc.request(http.MethodPost, path, opts...)
 }
+
+// put is a wrapper for request func.
+// It sends put request to specified url.
+func (lc LvlClient) put(path string, opts ...requestOption) (*http.Response, error) {
+	return lc.request(http.MethodPut, path, opts...)
+}
+
+// delete is a wrapper for request func.
+// It sends delete request to specified url.
+func (lc LvlClient) delete(path string, opts ...requestOption) (*http.Response, error) {
+	return lc.request(http.MethodDelete, path, opts...)
+}
