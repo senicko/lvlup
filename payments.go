@@ -7,14 +7,14 @@ import (
 	"strconv"
 )
 
-// CreatePaymentOptions represents available options for POST /wallet/up request.
+// CreatePaymentOptions represents available options for CreatePayment func.
 type CreatePaymentOptions struct {
 	Amount      string `json:"amount"`
 	RedirectUrl string `json:"redirectUrl"`
 	WebhookUrl  string `json:"webhookUrl"`
 }
 
-// CreatePaymentResult represents result of POST /wallet/up request.
+// CreatePaymentResult represents result of CreatePayment func.
 type CreatePaymentResult struct {
 	Id  string `json:"id"`
 	Url string `json:"url"`
@@ -37,7 +37,7 @@ func WithWebhook(url string) CreatePaymentOption {
 	}
 }
 
-// CreatePayment makes a request to POST /wallet/up.
+// CreatePayment allows to create a new payment url.
 // It returns result of a request and any errors encountered.
 func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*CreatePaymentResult, error) {
 	options := &CreatePaymentOptions{
@@ -60,7 +60,7 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 		"/wallet/up",
 		withBody(payload),
 		withHeaders(map[string]string{
-			"Authorization": "Bearer " + lc.ApiKey,
+			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
 		}),
 	)
 
@@ -82,7 +82,7 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 	return &result, nil
 }
 
-// ListPaymentsResultItem represents single item from GET /payments request result.
+// ListPaymentsResultItem represents single item from ListPayments func.
 type ListPaymentsResultItem struct {
 	Amount      string `json:"amount"`
 	CreatedAt   string `json:"createdAt"`
@@ -92,13 +92,13 @@ type ListPaymentsResultItem struct {
 	ServiceId   int    `json:"serviceId"`
 }
 
-// ListPaymentsResult represents result of GET /payments request.
+// ListPaymentsResult represents result of ListPayments func.
 type ListPaymentsResult struct {
 	Count int                      `json:"count"`
 	Items []ListPaymentsResultItem `json:"items"`
 }
 
-// ListPaymentsOptions represents a map storing optional query parameters for GET /payments request.
+// ListPaymentsOptions represents a map storing optional query parameters for ListPayments func.
 type ListPaymentsOptions map[string]string
 
 // ListPaymentsOption represents functional option for a ListPayments func.
@@ -125,7 +125,7 @@ func WithAfterId(afterId int) ListPaymentsOption {
 	}
 }
 
-// ListPayments makes a request to GET /payments.
+// ListPayments allows to list client's payments.
 // It returns request result and eny errors encountered.
 func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResult, error) {
 	var options ListPaymentsOptions = map[string]string{}
@@ -138,7 +138,7 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 		"/payments",
 		withQuery(options),
 		withHeaders(map[string]string{
-			"Authorization": "Bearer " + lc.ApiKey,
+			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
 		}),
 	)
 
@@ -160,19 +160,19 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 	return &result, nil
 }
 
-// WalletBalanceResult represents result of GET /wallet request.
+// WalletBalanceResult represents result of WalletBalance request.
 type WalletBalanceResult struct {
 	BalancePlnFormatted string `json:"balancePlnFormatted"`
 	BalancePlnInt       int    `json:"balancePlnInt"`
 }
 
-// WalletBalance makes a request to GET /wallet.
+// WalletBalance allows to get current wallet balance.
 // It returns request result and any errors encountered.
 func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 	response, err := lc.get(
 		"/wallet",
 		withHeaders(map[string]string{
-			"Authorization": "Bearer " + lc.ApiKey,
+			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
 		}),
 	)
 
@@ -194,7 +194,7 @@ func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 	return &result, nil
 }
 
-// InspectPaymentResult represents result of GET /wallet/up/{id}.
+// InspectPaymentResult represents result of InspectPayment func.
 type InspectPaymentResult struct {
 	AmountInt        int    `json:"amountInt"`
 	AmountStr        string `json:"amuntStr"`
@@ -203,13 +203,13 @@ type InspectPaymentResult struct {
 	Payed            bool   `json:"payed"`
 }
 
-// InspectPayment makes a request to GET /wallet/up/{id}.
+// InspectPayment allows to inspect a payment.
 // It returns request result and any errors encountered.
 func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, error) {
 	response, err := lc.get(
 		"/wallet/up/"+paymentId,
 		withHeaders(map[string]string{
-			"Authorization": "Bearer " + lc.ApiKey,
+			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
 		}),
 	)
 
