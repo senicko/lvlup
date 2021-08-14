@@ -1,231 +1,344 @@
 package lvlup_test
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/SeNicko/lvlup"
+	"github.com/SeNicko/lvlup/internal/testutil"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreatePaymentWithRedirectOption(t *testing.T) {
-	testRedirectUrl := "url"
-	testOptions := &lvlup.CreatePaymentOptions{}
+func Test_Set_Redirect_Url_For_Payment(t *testing.T) {
+	redirectUrl := "url"
 
-	lvlup.WithRedirect(testRedirectUrl)(testOptions)
+	handler := func(r *http.Request) (*http.Response, error) {
+		var body lvlup.CreatePaymentOptions
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			return nil, err
+		}
 
-	assert.Equal(t, testOptions.RedirectUrl, testRedirectUrl, "RedirectUrl should be set")
-}
+		if body.RedirectUrl != redirectUrl {
+			return nil, fmt.Errorf("RedirectUrl set to %v instead of %v", body.RedirectUrl, redirectUrl)
+		}
 
-func TestCreatePaymentWithWebhookUrl(t *testing.T) {
-	testWebhookUrl := "url"
-	testOptions := &lvlup.CreatePaymentOptions{}
+		rBody, err := json.Marshal(lvlup.CreatePaymentResult{})
+		if err != nil {
+			return nil, err
+		}
 
-	lvlup.WithWebhook(testWebhookUrl)(testOptions)
-
-	assert.Equal(t, testOptions.WebhookUrl, testWebhookUrl, "WebhookUrl should be set")
-}
-
-func successfullResponse(payload interface{}) func(http.ResponseWriter, *http.Request) {
-	return func(rw http.ResponseWriter, r *http.Request) {
-		rw.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(rw).Encode(payload)
-	}
-}
-
-func errorResponse(code int) func(http.ResponseWriter, *http.Request) {
-	return func(rw http.ResponseWriter, r *http.Request) {
-		rw.WriteHeader(code)
-	}
-}
-
-func TestCreatePayment(t *testing.T) {
-	assert := assert.New(t)
-
-	testResponse := &lvlup.CreatePaymentResult{
-		Id:  "id",
-		Url: "url",
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
 	}
 
-	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResponse)))
-	defer httpMock.Close()
+	client := testutil.NewTestLvlClient("token", handler)
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+	_, err := client.CreatePayment("1.00", lvlup.WithRedirect(redirectUrl))
 
-	result, err := client.CreatePayment("9.99")
-
-	assert.Nil(err, "Error should be nil")
-	assert.NotNil(result, "Resoul should be not nil")
+	assert.Nil(t, err, "Error should be nil")
 }
 
-func TestCreatePaymentError(t *testing.T) {
-	assert := assert.New(t)
+func Test_Set_Webhook_Url_For_Payment(t *testing.T) {
+	webhookUrl := "url"
 
-	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusBadRequest)))
-	defer httpMock.Close()
+	handler := func(r *http.Request) (*http.Response, error) {
+		var body lvlup.CreatePaymentOptions
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			return nil, err
+		}
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+		if body.WebhookUrl != webhookUrl {
+			return nil, fmt.Errorf("RedirectUrl set to %v instead of %v", body.WebhookUrl, webhookUrl)
+		}
 
-	result, err := client.CreatePayment("9.99")
+		rBody, err := json.Marshal(lvlup.CreatePaymentResult{})
+		if err != nil {
+			return nil, err
+		}
 
-	assert.NotNil(err, "Error should be not nil")
-	assert.Nil(result, "Result should be nil")
-}
-
-func TestListPaymentsWithLimitOption(t *testing.T) {
-	testLimit := 20
-	expectedLimit := "20"
-	testOptions := lvlup.ListPaymentsOptions{}
-
-	lvlup.WithLimit(testLimit)(&testOptions)
-
-	assert.Equal(t, testOptions["limit"], expectedLimit, "Limit should be equal 20")
-}
-
-func TestListPaymentsWithBeforeIdOption(t *testing.T) {
-	testBeforeId := 20
-	expectedBeforeId := "20"
-	testOptions := lvlup.ListPaymentsOptions{}
-
-	lvlup.WithBeforeId(testBeforeId)(&testOptions)
-
-	assert.Equal(t, testOptions["beforeId"], expectedBeforeId, "BeforeId should be set to 20")
-}
-
-func TestListPaymentsWithAfterIdOption(t *testing.T) {
-	testAfterId := 20
-	expectedAfterId := "20"
-	testOptions := lvlup.ListPaymentsOptions{}
-
-	lvlup.WithAfterId(testAfterId)(&testOptions)
-
-	assert.Equal(t, testOptions["afterId"], expectedAfterId, "AfterId should be set to 20")
-}
-
-func TestListPayments(t *testing.T) {
-	assert := assert.New(t)
-
-	testResponse := &lvlup.ListPaymentsResult{
-		Count: 0,
-		Items: []lvlup.ListPaymentsResultItem{},
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
 	}
 
-	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResponse)))
-	defer httpMock.Close()
+	client := testutil.NewTestLvlClient("token", handler)
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+	_, err := client.CreatePayment("1.00", lvlup.WithWebhook(webhookUrl))
 
-	result, err := client.ListPayments()
-
-	assert.Nil(err, "Error should be nil")
-	assert.NotNil(result, "Result should be not nil")
+	assert.Nil(t, err, "Error should be nil")
 }
 
-func TestListPaymentsError(t *testing.T) {
-	assert := assert.New(t)
+func Test_Create_Payment(t *testing.T) {
+	apiKey := "token"
+	amount := "10.00"
+	expectedPath := "/v4/wallet/up"
+	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
 
-	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusInternalServerError)))
-	defer httpMock.Close()
+	handler := func(r *http.Request) (*http.Response, error) {
+		if r.URL.Path != expectedPath {
+			return nil, fmt.Errorf("Request made to %v instead of %v", r.URL.Path, expectedPath)
+		}
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+		if r.Header.Get("Authorization") != expectedApiKey {
+			return nil, fmt.Errorf("Invalid authorization token format")
+		}
 
-	result, err := client.ListPayments()
+		var body lvlup.CreatePaymentOptions
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			return nil, err
+		}
 
-	assert.NotNil(err, "Error should not be nil")
-	assert.Nil(result, "Result should be nil")
-}
+		if body.Amount != amount {
+			return nil, fmt.Errorf("Amount set to %v instead of %v", body.Amount, amount)
+		}
 
-func TestWalletBalance(t *testing.T) {
-	assert := assert.New(t)
+		rBody, err := json.Marshal(lvlup.CreatePaymentResult{})
+		if err != nil {
+			return nil, err
+		}
 
-	testResult := &lvlup.WalletBalanceResult{
-		BalancePlnFormatted: "0PLN :P",
-		BalancePlnInt:       0,
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
 	}
 
-	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResult)))
-	defer httpMock.Close()
+	client := testutil.NewTestLvlClient(apiKey, handler)
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+	_, err := client.CreatePayment(amount)
 
-	result, err := client.WalletBalance()
-
-	assert.Nil(err, "Error should be nil")
-	assert.NotNil(result, "Result should not be nil")
+	assert.Nil(t, err, "Error should be nil")
 }
 
-func TestWalletBalanceError(t *testing.T) {
-	assert := assert.New(t)
+func Test_Create_Payment_Server_Error(t *testing.T) {
+	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
-	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusInternalServerError)))
-	defer httpMock.Close()
+	_, err := client.CreatePayment("1.00")
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
-
-	result, err := client.WalletBalance()
-
-	assert.NotNil(err, "Error should not be nil")
-	assert.Nil(result, "Result should be nil")
+	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func TestInspectPayment(t *testing.T) {
-	assert := assert.New(t)
+func Test_Set_Limit_For_List_Payments(t *testing.T) {
+	testLimit := 10
+	expectedLimit := "10"
 
-	testResult := &lvlup.InspectPaymentResult{
-		AmountInt:        1,
-		AmountStr:        "1",
-		AmountWithFeeInt: 2,
-		AmountWithFeeStr: "2",
-		Payed:            true,
+	handler := func(r *http.Request) (*http.Response, error) {
+		limit := r.URL.Query().Get("limit")
+
+		if limit != expectedLimit {
+			return nil, fmt.Errorf("AfterId set to %v instead of %v", limit, expectedLimit)
+		}
+
+		rBody, err := json.Marshal(lvlup.ListPaymentsResult{})
+		if err != nil {
+			return nil, err
+		}
+
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
 	}
 
-	httpMock := httptest.NewServer(http.HandlerFunc(successfullResponse(testResult)))
-	defer httpMock.Close()
+	client := testutil.NewTestLvlClient("token", handler)
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+	_, err := client.ListPayments(lvlup.WithLimit(testLimit))
 
-	result, err := client.InspectPayment("id")
-
-	assert.Nil(err, "Error should be nil")
-	assert.NotNil(result, "Result should not be nil")
+	assert.Nil(t, err, "Error should be nil")
 }
 
-func TestInspectPaymentError(t *testing.T) {
-	assert := assert.New(t)
+func Test_Set_BeforeId_For_List_Payments(t *testing.T) {
+	testBeforeId := 10
+	expectedBeforeId := "10"
 
-	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusInternalServerError)))
-	defer httpMock.Close()
+	handler := func(r *http.Request) (*http.Response, error) {
+		beforeId := r.URL.Query().Get("beforeId")
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+		if beforeId != expectedBeforeId {
+			return nil, fmt.Errorf("AfterId set to %v instead of %v", beforeId, expectedBeforeId)
+		}
 
-	result, err := client.InspectPayment("id")
+		rBody, err := json.Marshal(lvlup.ListPaymentsResult{})
+		if err != nil {
+			return nil, err
+		}
 
-	assert.NotNil(err, "Error should not be nil")
-	assert.Nil(result, "Result should be nil")
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
+	}
+
+	client := testutil.NewTestLvlClient("token", handler)
+
+	_, err := client.ListPayments(lvlup.WithBeforeId(testBeforeId))
+
+	assert.Nil(t, err, "Error should be nil")
 }
 
-func TestInspectPaymentNotFound(t *testing.T) {
-	assert := assert.New(t)
+func Test_Set_AfterId_For_List_Payments(t *testing.T) {
+	testAfterId := 10
+	expectedAfterId := "10"
 
-	httpMock := httptest.NewServer(http.HandlerFunc(errorResponse(http.StatusNotFound)))
-	defer httpMock.Close()
+	handler := func(r *http.Request) (*http.Response, error) {
+		afterId := r.URL.Query().Get("afterId")
 
-	client := lvlup.NewLvlClient("key", httpMock.Client())
-	client.ApiBase = httpMock.URL
+		if afterId != expectedAfterId {
+			return nil, fmt.Errorf("AfterId set to %v instead of %v", afterId, expectedAfterId)
+		}
 
-	result, err := client.InspectPayment("id")
+		rBody, err := json.Marshal(lvlup.ListPaymentsResult{})
+		if err != nil {
+			return nil, err
+		}
 
-	assert.Nil(err, "Error should be nil")
-	assert.Nil(result, "Result should be nil")
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
+	}
+
+	client := testutil.NewTestLvlClient("token", handler)
+
+	_, err := client.ListPayments(lvlup.WithAfterId(testAfterId))
+
+	assert.Nil(t, err, "Error should be nil")
+}
+
+func Test_List_Payments(t *testing.T) {
+	apiKey := "token"
+	expectedPath := "/v4/payments"
+	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+
+	handler := func(r *http.Request) (*http.Response, error) {
+		if r.URL.Path != expectedPath {
+			return nil, fmt.Errorf("Request made to %v instead of %v", r.URL.Path, expectedPath)
+		}
+
+		if r.Header.Get("Authorization") != expectedApiKey {
+			return nil, fmt.Errorf("Invalid authorization token format")
+		}
+
+		rBody, err := json.Marshal(lvlup.ListPaymentsResult{})
+		if err != nil {
+			return nil, err
+		}
+
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
+	}
+
+	client := testutil.NewTestLvlClient(apiKey, handler)
+
+	_, err := client.ListPayments()
+
+	assert.Nil(t, err, "Error should be nil")
+}
+
+func Test_List_Payments_Server_Error(t *testing.T) {
+	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
+
+	_, err := client.ListPayments()
+
+	assert.NotNil(t, err, "Error should not be nil")
+}
+
+func Test_Get_Wallet_Balance(t *testing.T) {
+	apiKey := "token"
+	expectedPath := "/v4/wallet"
+	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+
+	handler := func(r *http.Request) (*http.Response, error) {
+		if r.URL.Path != expectedPath {
+			return nil, fmt.Errorf("Request made to %v instead of %v", r.URL.Path, expectedPath)
+		}
+
+		if r.Header.Get("Authorization") != expectedApiKey {
+			return nil, fmt.Errorf("Invalid authorization token format")
+		}
+
+		rBody, err := json.Marshal(lvlup.WalletBalanceResult{})
+		if err != nil {
+			return nil, err
+		}
+
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
+	}
+
+	client := testutil.NewTestLvlClient(apiKey, handler)
+
+	_, err := client.WalletBalance()
+
+	assert.Nil(t, err, "Error should be nil")
+}
+
+func Test_Get_Wallet_Balance_Server_Error(t *testing.T) {
+	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
+
+	_, err := client.WalletBalance()
+
+	assert.NotNil(t, err, "Error should not be nil")
+}
+
+func Test_Inspect_Payment(t *testing.T) {
+	apiKey := "token"
+	paymentId := "1"
+	expectedPath := fmt.Sprintf("/v4/wallet/up/%v", paymentId)
+	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+
+	handler := func(r *http.Request) (*http.Response, error) {
+		if r.URL.Path != expectedPath {
+			return nil, fmt.Errorf("Request made to %v instead of %v", r.URL.Path, expectedPath)
+		}
+
+		if r.Header.Get("Authorization") != expectedApiKey {
+			return nil, fmt.Errorf("Invalid authorization token format")
+		}
+
+		rBody, err := json.Marshal(lvlup.InspectPaymentResult{})
+		if err != nil {
+			return nil, err
+		}
+
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewBuffer(rBody)),
+		}, nil
+	}
+
+	client := testutil.NewTestLvlClient(apiKey, handler)
+
+	_, err := client.InspectPayment(paymentId)
+
+	assert.Nil(t, err, "Error should be nil")
+}
+
+func Test_Inspect_Payment_Server_Error(t *testing.T) {
+	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
+
+	_, err := client.InspectPayment("id")
+
+	assert.NotNil(t, err, "Error should not be nil")
+}
+
+func Test_Inspect_Payment_NotFound_Error(t *testing.T) {
+	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusNotFound))
+
+	result, err := client.InspectPayment("")
+
+	assert.Nil(t, err, "Error should be nil")
+	assert.Nil(t, result, "Result should be nil")
 }
