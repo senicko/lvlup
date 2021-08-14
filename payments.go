@@ -3,6 +3,7 @@ package lvlup
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 )
@@ -68,11 +69,17 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 		return nil, err
 	}
 
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("status: %v", response.Status)
-	}
-
 	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		message, err := io.ReadAll(response.Body)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+	}
 
 	var result CreatePaymentResult
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
@@ -146,11 +153,17 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 		return nil, err
 	}
 
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("status: %v", response.Status)
-	}
-
 	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		message, err := io.ReadAll(response.Body)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+	}
 
 	var result ListPaymentsResult
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
@@ -180,11 +193,17 @@ func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 		return nil, err
 	}
 
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("status: %v", response.Status)
-	}
-
 	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		message, err := io.ReadAll(response.Body)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+	}
 
 	var result WalletBalanceResult
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
@@ -217,13 +236,19 @@ func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, err
 		return nil, err
 	}
 
+	defer response.Body.Close()
+
 	if response.StatusCode == http.StatusNotFound {
 		return nil, nil
 	} else if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("status: %v", response.Status)
-	}
+		message, err := io.ReadAll(response.Body)
 
-	defer response.Body.Close()
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+	}
 
 	var result InspectPaymentResult
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
