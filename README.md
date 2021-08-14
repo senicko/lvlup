@@ -6,7 +6,7 @@ Golang client for [LvlUp api v4](https://api.lvlup.pro/v4/redoc)
 
 Current codebase can be treated as a experiment which can be something different within an hour from now. `Project will become stable with version 1.0. Until then be aware of the braking changes`
 
-This does not mean that you shouldn't use it. Any feedback is welcome! If you have any ideas on how to make this library better, or you see potential issues with sourcecode create an issue with a proper flag.
+This does not mean that you shouldn't use it. Any feedback is welcome! If you have any ideas on how to make this library better, or you see potential problem create an issue with a proper flag.
 
 ## Quick Start
 
