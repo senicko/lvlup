@@ -78,7 +78,7 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result CreatePaymentResult
@@ -162,7 +162,7 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result ListPaymentsResult
@@ -202,7 +202,7 @@ func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result WalletBalanceResult
@@ -247,7 +247,7 @@ func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, err
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result InspectPaymentResult

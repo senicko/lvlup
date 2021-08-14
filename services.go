@@ -48,7 +48,7 @@ func (lc LvlClient) ListServices() (*ListServicesResult, error) {
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result ListServicesResult
@@ -93,7 +93,7 @@ func (lc LvlClient) ListDDoSAttacks(vpsId string) (*ListDDoSAttacksResult, error
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result ListDDoSAttacksResult
@@ -132,7 +132,7 @@ func (lc LvlClient) GetUDPFilter(vpsId string) (*GetUDPFilterResult, error) {
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result GetUDPFilterResult
@@ -187,7 +187,7 @@ func (lc LvlClient) SetUDPFiltering(vpsId string, filteringEnabled bool) (*SetUD
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result SetUDPFilteringResult
@@ -234,7 +234,7 @@ func (lc LvlClient) ListUDPFilterExceptions(vpsId string) ([]UDPFilterException,
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result []UDPFilterException
@@ -274,7 +274,7 @@ func (lc LvlClient) AddUDPFilterException(vpsId string, exception *UDPFilterExce
 			return err
 		}
 
-		return fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	return nil
@@ -302,7 +302,7 @@ func (lc LvlClient) RemoveUDPFilterException(vpsId string, exceptionId string) e
 			return err
 		}
 
-		return fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	return nil
@@ -337,7 +337,7 @@ func (lc LvlClient) GetProxmoUser(vpsId string) (*ProxmoUser, error) {
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var proxmo ProxmoUser
@@ -370,7 +370,7 @@ func (lc LvlClient) StartVPS(vpsId string) error {
 			return err
 		}
 
-		return fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	return nil
@@ -404,7 +404,7 @@ func (lc LvlClient) GetVPSState(vpsId string) (*GetVPSStateResult, error) {
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	var result GetVPSStateResult
@@ -437,7 +437,7 @@ func (lc LvlClient) StopVPS(vpsId string) error {
 			return err
 		}
 
-		return fmt.Errorf("status: %v, message: %v", response.Status, message)
+		return fmt.Errorf("status: %v, message: %s", response.Status, message)
 	}
 
 	return nil
