@@ -3,7 +3,6 @@ package lvlup
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"strconv"
 )
@@ -72,13 +71,7 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result CreatePaymentResult
@@ -156,13 +149,7 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result ListPaymentsResult
@@ -196,13 +183,7 @@ func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result WalletBalanceResult
@@ -241,13 +222,7 @@ func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, err
 	if response.StatusCode == http.StatusNotFound {
 		return nil, nil
 	} else if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result InspectPaymentResult

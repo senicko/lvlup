@@ -42,13 +42,7 @@ func (lc LvlClient) ListServices() (*ListServicesResult, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(http.StatusText(response.StatusCode))
 	}
 
 	var result ListServicesResult
@@ -87,13 +81,7 @@ func (lc LvlClient) ListDDoSAttacks(vpsId string) (*ListDDoSAttacksResult, error
 	}
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result ListDDoSAttacksResult
@@ -126,13 +114,7 @@ func (lc LvlClient) GetUDPFilter(vpsId string) (*GetUDPFilterResult, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result GetUDPFilterResult
@@ -181,13 +163,7 @@ func (lc LvlClient) SetUDPFiltering(vpsId string, filteringEnabled bool) (*SetUD
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result SetUDPFilteringResult
@@ -228,13 +204,7 @@ func (lc LvlClient) ListUDPFilterExceptions(vpsId string) ([]UDPFilterException,
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result []UDPFilterException
@@ -268,13 +238,7 @@ func (lc LvlClient) AddUDPFilterException(vpsId string, exception *UDPFilterExce
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return err
-		}
-
-		return fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return fmt.Errorf(response.Status)
 	}
 
 	return nil
@@ -331,13 +295,7 @@ func (lc LvlClient) GetProxmoUser(vpsId string) (*ProxmoUser, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var proxmo ProxmoUser
@@ -364,13 +322,7 @@ func (lc LvlClient) StartVPS(vpsId string) error {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return err
-		}
-
-		return fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return fmt.Errorf(response.Status)
 	}
 
 	return nil
@@ -398,13 +350,7 @@ func (lc LvlClient) GetVPSState(vpsId string) (*GetVPSStateResult, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return nil, fmt.Errorf(response.Status)
 	}
 
 	var result GetVPSStateResult
@@ -431,13 +377,7 @@ func (lc LvlClient) StopVPS(vpsId string) error {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		message, err := io.ReadAll(response.Body)
-
-		if err != nil {
-			return err
-		}
-
-		return fmt.Errorf("status: %v, message: %s", response.Status, message)
+		return fmt.Errorf(response.Status)
 	}
 
 	return nil
