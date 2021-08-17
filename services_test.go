@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_List_All_Services(t *testing.T) {
+func Test_list_all_services(t *testing.T) {
 	apiKey := "token"
 	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
 	expectedPath := "/v4/services"
@@ -45,7 +45,7 @@ func Test_List_All_Services(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_List_All_Services_Server_Error(t *testing.T) {
+func Test_list_all_services_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.ListServices()
@@ -53,7 +53,7 @@ func Test_List_All_Services_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_List_DDoS_Attacks(t *testing.T) {
+func Test_list_DDoS_attacks(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/attacks", vpsId)
@@ -86,7 +86,7 @@ func Test_List_DDoS_Attacks(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_List_DDoS_Attacks_Server_Error(t *testing.T) {
+func Test_list_DDoS_attacks_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusBadRequest))
 
 	_, err := client.ListDDoSAttacks("1")
@@ -94,7 +94,7 @@ func Test_List_DDoS_Attacks_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Get_UDP_Filter(t *testing.T) {
+func Test_get_UDP_filter(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering", vpsId)
@@ -127,7 +127,7 @@ func Test_Get_UDP_Filter(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Get_UDP_Filter_Server_Error(t *testing.T) {
+func Test_get_UDP_filter_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.GetUDPFilter("1")
@@ -135,7 +135,7 @@ func Test_Get_UDP_Filter_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Set_UDP_Filtering(t *testing.T) {
+func Test_set_UDP_filtering(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	filteringEnabled := true
@@ -178,7 +178,7 @@ func Test_Set_UDP_Filtering(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Set_UDP_Filtering_Server_Error(t *testing.T) {
+func Test_set_UDP_filtering_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.SetUDPFiltering("1", true)
@@ -186,7 +186,7 @@ func Test_Set_UDP_Filtering_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_List_UDP_Filter_Exceptions(t *testing.T) {
+func Test_list_UDP_filter_exceptions(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering/whitelist", vpsId)
@@ -219,7 +219,7 @@ func Test_List_UDP_Filter_Exceptions(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_List_UDP_Filter_Exceptions_Server_Error(t *testing.T) {
+func Test_list_UDP_filter_exceptions_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.ListUDPFilterExceptions("1")
@@ -227,7 +227,7 @@ func Test_List_UDP_Filter_Exceptions_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Add_UDP_Filter_Exception(t *testing.T) {
+func Test_add_UDP_filter_exception(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering/whitelist", vpsId)
@@ -254,7 +254,7 @@ func Test_Add_UDP_Filter_Exception(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Add_UDP_Filter_Exception_Server_Error(t *testing.T) {
+func Test_add_UDP_filter_exception_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	err := client.AddUDPFilterException("1", &lvlup.UDPFilterException{})
@@ -262,7 +262,7 @@ func Test_Add_UDP_Filter_Exception_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Remove_UDP_Filter_Exception(t *testing.T) {
+func Test_remove_UDP_filter_exception(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	exceptionId := "1"
@@ -290,7 +290,7 @@ func Test_Remove_UDP_Filter_Exception(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Remove_UDP_Filter_Exception_Server_Error(t *testing.T) {
+func Test_remove_UDP_filter_exception_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	err := client.RemoveUDPFilterException("1", "1")
@@ -298,7 +298,7 @@ func Test_Remove_UDP_Filter_Exception_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Get_Proxmo_User(t *testing.T) {
+func Test_get_proxmo_user(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/proxmo", vpsId)
@@ -331,7 +331,7 @@ func Test_Get_Proxmo_User(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Get_Proxmo_User_Error(t *testing.T) {
+func Test_get_proxmo_user_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.GetProxmoUser("1")
@@ -339,7 +339,7 @@ func Test_Get_Proxmo_User_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Start_VPS(t *testing.T) {
+func Test_start_VPS(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/start", vpsId)
@@ -366,7 +366,7 @@ func Test_Start_VPS(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Start_VPS_Error(t *testing.T) {
+func Test_start_VPS_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	err := client.StartVPS("1")
@@ -374,7 +374,7 @@ func Test_Start_VPS_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Get_VPS_State(t *testing.T) {
+func Test_get_VPS_state(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/state", vpsId)
@@ -407,7 +407,7 @@ func Test_Get_VPS_State(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Get_VPS_State_Server_Error(t *testing.T) {
+func Test_get_VPS_state_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.GetVPSState("1")
@@ -415,7 +415,7 @@ func Test_Get_VPS_State_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Stop_VPS(t *testing.T) {
+func Test_stop_VPS(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	expectedPath := fmt.Sprintf("/v4/services/vps/%v/stop", vpsId)
@@ -442,7 +442,7 @@ func Test_Stop_VPS(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Stop_VPS_Error(t *testing.T) {
+func Test_stop_VPS_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	err := client.StopVPS("1")

@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_Set_Redirect_Url_For_Payment(t *testing.T) {
+func Test_set_redirect_url_for_payment(t *testing.T) {
 	redirectUrl := "url"
 
 	handler := func(r *http.Request) (*http.Response, error) {
@@ -45,7 +45,7 @@ func Test_Set_Redirect_Url_For_Payment(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Set_Webhook_Url_For_Payment(t *testing.T) {
+func Test_set_webhook_url_for_payment(t *testing.T) {
 	webhookUrl := "url"
 
 	handler := func(r *http.Request) (*http.Response, error) {
@@ -76,7 +76,7 @@ func Test_Set_Webhook_Url_For_Payment(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Create_Payment(t *testing.T) {
+func Test_create_payment(t *testing.T) {
 	apiKey := "token"
 	amount := "10.00"
 	expectedPath := "/v4/wallet/up"
@@ -118,7 +118,7 @@ func Test_Create_Payment(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Create_Payment_Server_Error(t *testing.T) {
+func Test_create_payment_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.CreatePayment("1.00")
@@ -126,7 +126,7 @@ func Test_Create_Payment_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Set_Limit_For_List_Payments(t *testing.T) {
+func Test_set_limit_for_list_payments(t *testing.T) {
 	testLimit := 10
 	expectedLimit := "10"
 
@@ -155,7 +155,7 @@ func Test_Set_Limit_For_List_Payments(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Set_BeforeId_For_List_Payments(t *testing.T) {
+func Test_set_beforeId_for_list_payments(t *testing.T) {
 	testBeforeId := 10
 	expectedBeforeId := "10"
 
@@ -184,7 +184,7 @@ func Test_Set_BeforeId_For_List_Payments(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Set_AfterId_For_List_Payments(t *testing.T) {
+func Test_set_afterId_for_list_payments(t *testing.T) {
 	testAfterId := 10
 	expectedAfterId := "10"
 
@@ -213,7 +213,7 @@ func Test_Set_AfterId_For_List_Payments(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_List_Payments(t *testing.T) {
+func Test_list_payments(t *testing.T) {
 	apiKey := "token"
 	expectedPath := "/v4/payments"
 	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
@@ -245,7 +245,7 @@ func Test_List_Payments(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_List_Payments_Server_Error(t *testing.T) {
+func Test_list_payments_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.ListPayments()
@@ -253,7 +253,7 @@ func Test_List_Payments_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Get_Wallet_Balance(t *testing.T) {
+func Test_get_wallet_balance(t *testing.T) {
 	apiKey := "token"
 	expectedPath := "/v4/wallet"
 	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
@@ -285,7 +285,7 @@ func Test_Get_Wallet_Balance(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Get_Wallet_Balance_Server_Error(t *testing.T) {
+func Test_get_wallet_balance_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.WalletBalance()
@@ -293,7 +293,7 @@ func Test_Get_Wallet_Balance_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Inspect_Payment(t *testing.T) {
+func Test_inspect_payment(t *testing.T) {
 	apiKey := "token"
 	paymentId := "1"
 	expectedPath := fmt.Sprintf("/v4/wallet/up/%v", paymentId)
@@ -326,7 +326,7 @@ func Test_Inspect_Payment(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 }
 
-func Test_Inspect_Payment_Server_Error(t *testing.T) {
+func Test_inspect_payment_server_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusInternalServerError))
 
 	_, err := client.InspectPayment("id")
@@ -334,7 +334,7 @@ func Test_Inspect_Payment_Server_Error(t *testing.T) {
 	assert.NotNil(t, err, "Error should not be nil")
 }
 
-func Test_Inspect_Payment_NotFound_Error(t *testing.T) {
+func Test_inspect_payment_not_found_error(t *testing.T) {
 	client := testutil.NewTestLvlClient("token", testutil.HttpError(http.StatusNotFound))
 
 	result, err := client.InspectPayment("")
