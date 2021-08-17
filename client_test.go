@@ -1,6 +1,7 @@
 package lvlup_test
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/SeNicko/lvlup"
@@ -8,15 +9,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWithSandboxModeOption(t *testing.T) {
-	assert := assert.New(t)
+func Test_create_client_with_sandbox_mode_option(t *testing.T) {
+	client := lvlup.NewLvlClient("key", http.DefaultClient, lvlup.WithSandboxMode())
 
-	testSandboxMode := true
-	testSandboxApiBase := "https://api.lvlup.pro/v4/sandbox"
-	testOptions := &lvlup.LvlClient{}
-
-	lvlup.WithSandboxMode()(testOptions)
-
-	assert.Equal(testOptions.ApiBase, testSandboxApiBase, "ApiBase set to sandbox api base")
-	assert.Equal(testOptions.SandboxMode, testSandboxMode, "SandboxMode set to true")
+	assert.Equal(t, client.ApiBase, "https://api.lvlup.pro/v4/sandbox")
+	assert.True(t, client.SandboxMode)
 }
