@@ -15,7 +15,7 @@ import (
 
 func Test_list_all_services(t *testing.T) {
 	apiKey := "token"
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedApiKey := "Bearer " + apiKey
 	expectedPath := "/v4/services"
 
 	handler := func(r *http.Request) (*http.Response, error) {
@@ -56,8 +56,8 @@ func Test_list_all_services_server_error(t *testing.T) {
 func Test_list_DDoS_attacks(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/attacks", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/attacks"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -97,8 +97,8 @@ func Test_list_DDoS_attacks_server_error(t *testing.T) {
 func Test_get_UDP_filter(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/filtering"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -139,8 +139,8 @@ func Test_set_UDP_filtering(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	filteringEnabled := true
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/filtering"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -189,8 +189,8 @@ func Test_set_UDP_filtering_server_error(t *testing.T) {
 func Test_list_UDP_filter_exceptions(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering/whitelist", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/filtering/whitelist"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -230,8 +230,8 @@ func Test_list_UDP_filter_exceptions_server_error(t *testing.T) {
 func Test_add_UDP_filter_exception(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering/whitelist", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/filtering/whitelist"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -266,8 +266,8 @@ func Test_remove_UDP_filter_exception(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
 	exceptionId := "1"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/filtering/whitelist/%v", vpsId, exceptionId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/filtering/whitelist/" + exceptionId
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -301,8 +301,8 @@ func Test_remove_UDP_filter_exception_server_error(t *testing.T) {
 func Test_get_proxmo_user(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/proxmo", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/proxmo"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -342,8 +342,8 @@ func Test_get_proxmo_user_error(t *testing.T) {
 func Test_start_VPS(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/start", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/start"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -377,8 +377,8 @@ func Test_start_VPS_error(t *testing.T) {
 func Test_get_VPS_state(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/state", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %s", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/state"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -418,8 +418,8 @@ func Test_get_VPS_state_server_error(t *testing.T) {
 func Test_stop_VPS(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	expectedPath := fmt.Sprintf("/v4/services/vps/%v/stop", vpsId)
-	expectedApiKey := fmt.Sprintf("Bearer %s", apiKey)
+	expectedPath := "/v4/services/vps/" + vpsId + "/stop"
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {

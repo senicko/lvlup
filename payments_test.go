@@ -80,7 +80,7 @@ func Test_create_payment(t *testing.T) {
 	apiKey := "token"
 	amount := "10.00"
 	expectedPath := "/v4/wallet/up"
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -216,7 +216,7 @@ func Test_set_afterId_for_list_payments(t *testing.T) {
 func Test_list_payments(t *testing.T) {
 	apiKey := "token"
 	expectedPath := "/v4/payments"
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -256,7 +256,7 @@ func Test_list_payments_server_error(t *testing.T) {
 func Test_get_wallet_balance(t *testing.T) {
 	apiKey := "token"
 	expectedPath := "/v4/wallet"
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {
@@ -296,8 +296,8 @@ func Test_get_wallet_balance_server_error(t *testing.T) {
 func Test_inspect_payment(t *testing.T) {
 	apiKey := "token"
 	paymentId := "1"
-	expectedPath := fmt.Sprintf("/v4/wallet/up/%v", paymentId)
-	expectedApiKey := fmt.Sprintf("Bearer %v", apiKey)
+	expectedPath := "/v4/wallet/up/" + paymentId
+	expectedApiKey := "Bearer " + apiKey
 
 	handler := func(r *http.Request) (*http.Response, error) {
 		if r.URL.Path != expectedPath {

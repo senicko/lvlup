@@ -60,7 +60,7 @@ func (lc LvlClient) CreatePayment(amount string, opts ...CreatePaymentOption) (*
 		"/wallet/up",
 		withBody(payload),
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -138,7 +138,7 @@ func (lc LvlClient) ListPayments(opts ...ListPaymentsOption) (*ListPaymentsResul
 		"/payments",
 		withQuery(options),
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -172,7 +172,7 @@ func (lc LvlClient) WalletBalance() (*WalletBalanceResult, error) {
 	response, err := lc.get(
 		"/wallet",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -209,7 +209,7 @@ func (lc LvlClient) InspectPayment(paymentId string) (*InspectPaymentResult, err
 	response, err := lc.get(
 		"/wallet/up/"+paymentId,
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 

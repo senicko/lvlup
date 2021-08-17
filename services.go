@@ -31,7 +31,7 @@ func (lc LvlClient) ListServices() (*ListServicesResult, error) {
 	response, err := lc.get(
 		"/services",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -70,9 +70,9 @@ type ListDDoSAttacksResult struct {
 // ListDDoSAttacks allows to access list of DDoS attacks for specific VPS.
 func (lc LvlClient) ListDDoSAttacks(vpsId string) (*ListDDoSAttacksResult, error) {
 	response, err := lc.get(
-		fmt.Sprintf("/services/vps/%v/attacks", vpsId),
+		"/services/vps/"+vpsId+"/attacks",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -101,9 +101,9 @@ type GetUDPFilterResult struct {
 // GetUDPFilter allows to check UDP filtering status for specified VPS.
 func (lc LvlClient) GetUDPFilter(vpsId string) (*GetUDPFilterResult, error) {
 	response, err := lc.get(
-		fmt.Sprintf("/services/vps/%v/filtering", vpsId),
+		"/services/vps/"+vpsId+"/filtering",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -149,10 +149,10 @@ func (lc LvlClient) SetUDPFiltering(vpsId string, filteringEnabled bool) (*SetUD
 	}
 
 	response, err := lc.put(
-		fmt.Sprintf("/services/vps/%v/filtering", vpsId),
+		"/services/vps/"+vpsId+"/filtering",
 		withBody(payload),
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -191,9 +191,9 @@ type UDPFilterException struct {
 // ListUDPFilterExceptions allows to list all exceptions for UDP filter.
 func (lc LvlClient) ListUDPFilterExceptions(vpsId string) ([]UDPFilterException, error) {
 	response, err := lc.get(
-		fmt.Sprintf("/services/vps/%v/filtering/whitelist", vpsId),
+		"/services/vps/"+vpsId+"/filtering/whitelist",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -224,10 +224,10 @@ func (lc LvlClient) AddUDPFilterException(vpsId string, exception *UDPFilterExce
 	}
 
 	response, err := lc.post(
-		fmt.Sprintf("/services/vps/%v/filtering/whitelist", vpsId),
+		"/services/vps/"+vpsId+"/filtering/whitelist",
 		withBody(payload),
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -247,9 +247,9 @@ func (lc LvlClient) AddUDPFilterException(vpsId string, exception *UDPFilterExce
 // RemoveUDPFilterException allows to remove exception for UDP filter.
 func (lc LvlClient) RemoveUDPFilterException(vpsId string, exceptionId string) error {
 	response, err := lc.delete(
-		fmt.Sprintf("/services/vps/%v/filtering/whitelist/%v", vpsId, exceptionId),
+		"/services/vps/"+exceptionId+"/filtering/whitelist/"+exceptionId,
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -282,9 +282,9 @@ type ProxmoUser struct {
 // GetProxmoUser allows to create new proxmo user, or reset password if already exists.
 func (lc LvlClient) GetProxmoUser(vpsId string) (*ProxmoUser, error) {
 	response, err := lc.post(
-		fmt.Sprintf("/services/vps/%v/proxmo", vpsId),
+		"/services/vps/"+vpsId+"/proxmo",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -309,9 +309,9 @@ func (lc LvlClient) GetProxmoUser(vpsId string) (*ProxmoUser, error) {
 // StartVps allows to start specified VPS server.
 func (lc LvlClient) StartVPS(vpsId string) error {
 	response, err := lc.post(
-		fmt.Sprintf("/services/vps/%v/start", vpsId),
+		"/services/vps/"+vpsId+"/start",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -337,9 +337,9 @@ type GetVPSStateResult struct {
 // GetVPSState allows to get specified VPS state.
 func (lc LvlClient) GetVPSState(vpsId string) (*GetVPSStateResult, error) {
 	response, err := lc.get(
-		fmt.Sprintf("/services/vps/%v/state", vpsId),
+		"/services/vps/"+vpsId+"/state",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
@@ -364,9 +364,9 @@ func (lc LvlClient) GetVPSState(vpsId string) (*GetVPSStateResult, error) {
 // StopVPS allows to stop specified VPS.
 func (lc LvlClient) StopVPS(vpsId string) error {
 	response, err := lc.post(
-		fmt.Sprintf("/services/vps/%v/stop", vpsId),
+		"/services/vps/"+vpsId+"/stop",
 		withHeaders(map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", lc.ApiKey),
+			"Authorization": "Bearer " + lc.ApiKey,
 		}),
 	)
 
