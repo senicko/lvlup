@@ -25,7 +25,6 @@ func WithSandboxMode() LvlClientOption {
 
 // NewLvlClient creates new lvlup api client.
 func NewLvlClient(apiKey string, httpClient *http.Client, opts ...LvlClientOption) *LvlClient {
-
 	lc := &LvlClient{
 		ApiKey:      apiKey,
 		ApiBase:     "https://api.lvlup.pro/v4",
