@@ -12,6 +12,6 @@ import (
 func Test_create_client_with_sandbox_mode_option(t *testing.T) {
 	client := lvlup.NewLvlClient("key", http.DefaultClient, lvlup.WithSandboxMode())
 
-	assert.Equal(t, client.ApiBase, "https://api.lvlup.pro/v4/sandbox")
+	assert.Equal(t, client.ApiBase, "https://api.sandbox.lvlup.pro/v4/sandbox")
 	assert.True(t, client.SandboxMode)
 }
