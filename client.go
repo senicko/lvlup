@@ -19,7 +19,7 @@ type LvlClientOption func(*LvlClient)
 func WithSandboxMode() LvlClientOption {
 	return func(lc *LvlClient) {
 		lc.SandboxMode = true
-		lc.ApiBase = "https://api.sandbox.lvlup.pro/v4/sandbox"
+		lc.ApiBase = "https://api.sandbox.lvlup.pro/v4"
 	}
 }
 
