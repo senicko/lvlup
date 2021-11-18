@@ -3,6 +3,7 @@
 Golang client for [LvlUp api v4](https://api.lvlup.pro/v4/redoc)
 
 ## Quick Start
+`go get -u github.com/senicko/lvlup`
 
 ```go
 package main
@@ -31,3 +32,5 @@ func main() {
   fmt.Println(result)
 }
 ```
+
+See all available methods on https://pkg.go.dev/github.com/senicko/lvlup
