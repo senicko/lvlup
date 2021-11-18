@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/SeNicko/lvlup"
+	"github.com/senicko/lvlup"
 
 	"github.com/stretchr/testify/assert"
 )

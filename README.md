@@ -11,9 +11,13 @@ This does not mean that you shouldn't use it. Any feedback is welcome! If you ha
 ## Quick Start
 
 ```go
+package main
+
 import (
   "net/http"
   "fmt"
+  
+  "github.com/senicko/lvlup"
 )
 
 func main() {
@@ -23,7 +27,7 @@ func main() {
   result, err := client.CreatePayment(
     "24.99",
     lvlup.WithRedirectUrl("<redirect_url>"),
-    lvlup.WithWebhookUrl("<webhook_url>")
+    lvlup.WithWebhookUrl("<webhook_url>"),
   )
 
   if err != nil {

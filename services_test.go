@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/SeNicko/lvlup"
-	"github.com/SeNicko/lvlup/internal/testutil"
+	"github.com/senicko/lvlup"
+	"github.com/senicko/lvlup/internal/testutil"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -138,7 +138,6 @@ func Test_get_UDP_filter_server_error(t *testing.T) {
 func Test_set_UDP_filtering(t *testing.T) {
 	vpsId := "1"
 	apiKey := "token"
-	filteringEnabled := true
 	expectedPath := "/v4/services/vps/" + vpsId + "/filtering"
 	expectedApiKey := "Bearer " + apiKey
 
@@ -156,8 +155,8 @@ func Test_set_UDP_filtering(t *testing.T) {
 			return nil, err
 		}
 
-		if body.FilteringEnabled != filteringEnabled {
-			return nil, fmt.Errorf("FilteringEnabled set to %v instead of %v", body.FilteringEnabled, filteringEnabled)
+		if body.FilteringEnabled != true {
+			return nil, fmt.Errorf("FilteringEnabled set to %v instead of %v", body.FilteringEnabled, true)
 		}
 
 		rBody, err := json.Marshal(lvlup.SetUDPFilteringResult{})
@@ -173,7 +172,7 @@ func Test_set_UDP_filtering(t *testing.T) {
 
 	client := testutil.NewTestLvlClient("token", handler)
 
-	_, err := client.SetUDPFiltering(vpsId, filteringEnabled)
+	_, err := client.SetUDPFiltering(vpsId, true)
 
 	assert.Nil(t, err, "Error should be nil")
 }

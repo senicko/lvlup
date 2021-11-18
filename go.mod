@@ -1,4 +1,4 @@
-module github.com/SeNicko/lvlup
+module github.com/senicko/lvlup
 
 go 1.16
 

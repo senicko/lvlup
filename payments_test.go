@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/SeNicko/lvlup"
-	"github.com/SeNicko/lvlup/internal/testutil"
+	"github.com/senicko/lvlup"
+	"github.com/senicko/lvlup/internal/testutil"
 
 	"github.com/stretchr/testify/assert"
 )
